@@ -1,0 +1,20 @@
+body{
+    height: 90vh;
+    padding: 10%;
+    align-items: center;
+}
+
+h1{
+    margin: 100px; 
+}
+
+.Contenedor{
+    background-color: rgb(16, 122, 155);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+}
+.btnStyle{
+    display: flex;
+    margin: 20px;
+}

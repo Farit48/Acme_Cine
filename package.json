@@ -1,0 +1,25 @@
+{
+  "name": "farit_acme_cine",
+  "version": "1.0.0",
+  "description": "Aplicacion de administracion de peliculas para el cine",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon farit_acme_cine --quiet"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.18.0",
+    "semver": "^7.7.2"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.1",
+    "nodemon": "^3.1.10"
+  }
+}
