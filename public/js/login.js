@@ -12,7 +12,7 @@ inicioSesion.addEventListener('click', async(event)=>{
     };
    
 
-    const post =  await fetch('http://localhost:3002/user/login', 
+    const post =  await fetch('http://localhost:3002/log/login', 
         {
             method:'POST',
             headers:{
@@ -26,7 +26,8 @@ inicioSesion.addEventListener('click', async(event)=>{
    
     if(post.ok){
         const result = await post.json()
+        console.log(result)
         localStorage.setItem('token', result.token)
-        window.location.href = '/views/registro.html'
+        window.location.href = '/views/dashboard.html'
     }
 });

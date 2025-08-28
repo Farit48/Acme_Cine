@@ -1,0 +1,47 @@
+body{
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000000; 
+    color: #e0e0e0;
+    height: 98vh;
+}
+
+
+
+.Contenedor_Principal{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    column-gap: 10px;
+    padding: 10px;
+    height: 200%;
+    
+    
+}
+
+.Aside{
+    border: 1px rgb(255, 253, 253) solid;
+    border-radius: 20px;
+    background-color: #383838;
+    width: 75%;
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-self: center; 
+    position: sticky;
+    top: 0;
+    align-self: start; 
+    height: 100vh; 
+}
+.Aside-Conenedor{
+    height: 80%;
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.Header{
+    text-align: center;
+}

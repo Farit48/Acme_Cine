@@ -1,10 +1,12 @@
 import jwt from 'jsonwebtoken'
 
+import 'dotenv/config'
+
 const verifyToken = (req,res,next)=>{
     const token = req.header('Authorization')
     if(!token) return res.status(401).json({message:'Acceso denegado'})
     try{
-        const verified = jwt.verify( token, process.env.CLAVE_SEGURA)
+        const verified = jwt.verify( token.split(' ')[1], process.env.CLAVE_SEGURA)
         req.user = verified;
         next()
     }catch (err){
