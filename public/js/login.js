@@ -28,6 +28,7 @@ inicioSesion.addEventListener('click', async(event)=>{
         const result = await post.json()
         console.log(result)
         localStorage.setItem('token', result.token)
+        localStorage.setItem('dataUser', JSON.stringify(result.userData))
         window.location.href = '/views/dashboard.html'
     }
 });

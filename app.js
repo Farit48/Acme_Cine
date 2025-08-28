@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(express.static('./public'))
 
 app.use('/log' ,authRoute)
-app.use('/user', verifyToken,userRoute)
+app.use('/user', userRoute)
 
 
 app.listen(

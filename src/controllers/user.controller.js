@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
 
 import {validationResult} from 'express-validator'
+import Userlog from "../../helpers/dtos/userlog.dto.js";
+
 
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
@@ -29,7 +31,9 @@ export default class UserController {
             if(result1){
                 if(bcrypt.compareSync(password,result1.password)){
                     const token = jwt.sign({sub:result1._id, name:result1.name, email:result1.email}, process.env.CLAVE_SEGURA, {expiresIn:'1h'})
-                    return res.json({token})
+                    const userData = new Userlog(result1)
+                    console.log(userData)
+                    return res.json({token,userData})
                 }
             }
             return res.json({message:'No se haya usuario'})
