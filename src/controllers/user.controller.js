@@ -47,7 +47,7 @@ export default class UserController {
             const result = await this.#userModel.findAll()
             return res.status(200).send(result)
         }catch(err){
-            res.status(401).json({message:'Error al crear usuario', error: err})
+            res.status(400).json({message:'Error al obtener usuarios', error: err})
         }
     }
         
@@ -56,7 +56,7 @@ export default class UserController {
         try{
             const data = await this.#userModel.findBy({_id:ObjectId.createFromHexString(req.params.id)});
             if(data){
-               return res.status(201).json(data)
+               return res.status(200).json(data)
             }else{
                 return res.status(404).json({message: 'Info no encontrada'})
             }
@@ -77,22 +77,23 @@ export default class UserController {
             const passwordHash = bcrypt.hashSync(user.password,10)
             const creation = await this.#userModel.create({...user,password:passwordHash})
             
-            return res.status(201).json({message:'Usuarion creado con exito', creation})
+            return res.status(200).json({message:'Usuarion creado con exito', creation})
         }catch(err){
-            res.status(401).json({message:'Error al crear usuario', error: err})
+            res.status(500).json({message:'Error al crear usuario', error: err})
         }
     }
     async update(req,res){
         try{
             const errors = validationResult(req)
+            console.log(req.body)
             if(!errors.isEmpty()){
                 console.log('Error de validacion')
-                return res.json({message:'aaaaaa  Error de validacion', errors})
+                return res.status(401).json({message:'aaaaaa  Error de validacion', errors})
             }
             const result = await this.#userModel.update({_id:ObjectId.createFromHexString(req.params.id)}, {$set:req.body})
-            return res.status(201).json({message:'Actualizado con exito', result})
+            return res.status(200).json({message:'Actualizado con exito', result})
         }catch(err){
-            res.status(401).json({message:'Error al crear usuario', error: err})
+            res.status(500).json({message:'Error al crear usuario', error: err})
         }
     }
         
@@ -100,9 +101,9 @@ export default class UserController {
         try{
             const result = await this.#userModel.delete({_id:ObjectId.createFromHexString(req.params.id)})
             console.log(result)
-            return res.status(201).json({message:'Se pudo eliminar correctamente'})
+            return res.status(200).json({message:'Se pudo eliminar correctamente'})
         }catch(err){
-            res.status(401).json({message:'Error al Eliminar usuario', err})
+            res.status(500).json({message:'Error al Eliminar usuario', err})
         }
     }
 
