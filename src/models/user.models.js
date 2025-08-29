@@ -20,8 +20,8 @@ export default class Usermodel {
     async update(_id, updatedData){
         return await this.#user.updateOne(_id,updatedData);
     }
-    async delete(_id){
-        return await this.#user.deleteOne(_id);
+    async delete(id){
+        return await this.#user.deleteOne(id);
     }
 
 }

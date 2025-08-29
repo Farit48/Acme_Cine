@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../styles/dashboart.css">
-    <script src="../js/dashboard.js" defer></script>
+    <script type="module"  src="../js/dashboard.js" defer></script>
 </head>
 <body>
     
@@ -18,15 +18,19 @@
                     <p id="rol"></p>
                     <p id="email"></p>
                 </div>
+                <div>
+                    <input id="UsuariosBtn" type="button" value="Usuarios">
+                    <input id="Cinesbtn" type="button" value="Cines">
+                    <input id="FuncionesBtn" type="button" value="Funciones">
+                </div>
                 <div>Boton de actualizar</div>
             </div>
         </aside>
         <main class="Main">
-            <header class="Header">
-                <h1>Bienvenido a Acme Cine</h1>
-                <h3>Fecha de hoy</h3>
-            </header>
-            <p>Info general</p>
+            <div id="Main-dinamic">
+               
+                
+            </div>
         </main>
     </div>
 </body>

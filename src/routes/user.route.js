@@ -21,12 +21,12 @@ const userRoute = express.Router()
 
 userRoute.post('/register', createUserValidator, userController.create)
 userRoute.get('/read',userController.getAll )
-userRoute.get('/read:_id',userController.getBy )
+userRoute.get('/read/:id',userController.getBy )
 userRoute.put('/update/:id', updateUserValidator, userController.update)
 userRoute.delete('/deleate/:id', userController.delete)
 
 
 
-userRoute.post('/login', loginValidator )
+
 
 export default userRoute

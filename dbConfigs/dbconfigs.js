@@ -1,6 +1,6 @@
 // use Farit_Acme_Cine
 
-db.createCollection("Cines", {
+db.createCollection("Cinemas", {
     validator: {
       $jsonSchema: {
         bsonType: "object", 

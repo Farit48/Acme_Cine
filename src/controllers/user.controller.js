@@ -25,7 +25,7 @@ export default class UserController {
         try{
             const {user, password} = req.body
             if(!user || !password){
-                return res.status(401).json({message:'Ingrese datos'})
+                return res.status(400).json({message:'Ingrese datos'})
             }
             const result1 = await this.#userModel.findBy({email:user})
             if(result1){
@@ -33,10 +33,10 @@ export default class UserController {
                     const token = jwt.sign({sub:result1._id, name:result1.name, email:result1.email}, process.env.CLAVE_SEGURA, {expiresIn:'1h'})
                     const userData = new Userlog(result1)
                     console.log(userData)
-                    return res.json({token,userData})
+                    return res.status(200).json({message:'Usuario correcto',token,userData})
                 }
             }
-            return res.json({message:'No se haya usuario'})
+            return res.status(401).json({message:'No se haya usuario'})
 
         }catch(err){
             res.status(500).json({message:'Error del servidor', error:err})
@@ -56,7 +56,7 @@ export default class UserController {
         try{
             const data = await this.#userModel.findBy({_id:ObjectId.createFromHexString(req.params.id)});
             if(data){
-               return res.json(data)
+               return res.status(201).json(data)
             }else{
                 return res.status(404).json({message: 'Info no encontrada'})
             }
@@ -71,8 +71,7 @@ export default class UserController {
         try{
             const errors = validationResult(req)
             if(!errors.isEmpty()){
-                console.log('Error de validacion')
-                return res.json({message:'Error de validacion', errors})
+                return res.status(401).json({message:'Error de validacion', errors})
             }
             const user = req.body
             const passwordHash = bcrypt.hashSync(user.password,10)
@@ -91,7 +90,7 @@ export default class UserController {
                 return res.json({message:'aaaaaa  Error de validacion', errors})
             }
             const result = await this.#userModel.update({_id:ObjectId.createFromHexString(req.params.id)}, {$set:req.body})
-            return res.status(200).json({message:'Actualizado con exito', result})
+            return res.status(201).json({message:'Actualizado con exito', result})
         }catch(err){
             res.status(401).json({message:'Error al crear usuario', error: err})
         }
@@ -100,9 +99,10 @@ export default class UserController {
     async delete (req,res){
         try{
             const result = await this.#userModel.delete({_id:ObjectId.createFromHexString(req.params.id)})
-            return res.status(201).json({message:'Se pudo eliminar correctamente', result})
+            console.log(result)
+            return res.status(201).json({message:'Se pudo eliminar correctamente'})
         }catch(err){
-            res.status(401).json({message:'Error al crear usuario', error: err})
+            res.status(401).json({message:'Error al Eliminar usuario', err})
         }
     }
 
