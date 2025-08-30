@@ -54,7 +54,7 @@ db.createCollection("Cinemas", {
       }
     }
 });
-db.createCollection("Peliculas", {
+db.createCollection("Films", {
     validator: {
       $jsonSchema: {
         bsonType: "object", 

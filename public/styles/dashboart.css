@@ -2,7 +2,7 @@ body{
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('../utilsFront/iwouldliketoworkthere.png');
+    background-image: url('../utilsFront/aaa.png');
     background-size: cover;
     color: #e0e0e0;
     height: 98vh;
@@ -57,40 +57,57 @@ body{
 
 
 #Main-dinamic table {
-    width: 85%; 
-    border-collapse: separate; 
-    border-spacing: 0; 
-    margin-top: 20px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    border-radius: 8px; 
+    width: 85%;
+    border-collapse: none; /* Permite fusionar bordes */
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
     overflow: hidden;
-    background-color: #ffffff; 
+    background-color: transparent;
+     backdrop-filter: blur(8px);
 }
-
 
 #Main-dinamic table th {
-    background-color: #6a11cb; 
-    color: white; 
-    padding: 12px 15px; 
+    background-color: #371161;
+    color: white;
+    padding: 12px 15px;
     text-align: center;
     font-weight: bold;
-    border-bottom: 2px solid #560a9f; 
+    border-bottom: 2px solid #560a9f; /* Borde inferior para los encabezados */
 }
 
-
-#Main-dinamic table td {
-    padding: 10px 15px; 
+/*
+  CSS para las celdas de la tabla principal
+*/
+#Main-dinamic table > tbody > tr > td {
+    padding: 10px 15px;
     text-align: center;
-    border-bottom: 1px solid #e0e0e0; 
-    color: #333; 
+    border-bottom: 1px solid #e0e0e0;
+    color: #ffffff;
 }
 
+/*
+  CSS para las tablas anidadas dentro de las celdas de la tabla principal
+*/
+#Main-dinamic table > tbody > tr > td table {
+    /* Resetea el border-collapse para esta tabla anidada */
+    border-collapse: separate;
+    border-spacing: 0; 
+    width: 100%; /* Ocupa el 100% de la celda contenedora */
+}
 
+#Main-dinamic table > tbody > tr > td table td {
+    border: 1px solid #e0e0e0; /* Aplica bordes a las celdas de la tabla anidada */
+    padding: 10px 15px;
+}
+
+/*
+  Estilos adicionales y de hover
+*/
 #Main-dinamic table tbody tr:hover {
-    background-color: #f5f5f5;
-    cursor: pointer; 
+    
+    cursor: pointer;
 }
-
 
 #Main-dinamic table th:first-child {
     border-top-left-radius: 8px;
@@ -100,7 +117,6 @@ body{
     border-top-right-radius: 8px;
 }
 
-
 #Main-dinamic table tbody tr:last-child td:first-child {
     border-bottom-left-radius: 8px;
 }
@@ -108,7 +124,6 @@ body{
 #Main-dinamic table tbody tr:last-child td:last-child {
     border-bottom-right-radius: 8px;
 }
-
 
 #Main-dinamic table tbody tr:last-child td {
     border-bottom: none;

@@ -1,9 +1,7 @@
 import express from 'express'
 
 
-import 'dotenv/config'
 
-import {  } from '../../helpers/middlerwares/user.validator.js'
 
 
 
@@ -21,7 +19,7 @@ const cinemaRoute = express.Router()
 
 cinemaRoute.post('/register', cinemaController.create)
 cinemaRoute.get('/read',cinemaController.getAll )
-cinemaRoute.get('/read:_id',cinemaController.getBy )
+cinemaRoute.get('/readBy/:id',cinemaController.getBy )
 cinemaRoute.put('/update/:id', cinemaController.update)
 cinemaRoute.delete('/deleate/:id', cinemaController.delete)
 

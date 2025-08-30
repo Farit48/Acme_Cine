@@ -1,4 +1,4 @@
-import { post, put } from "./servers.js";
+import { post, put } from "../servers.js";
 export function rowsTableUsers(data){
     return  data = 
             `<tr>
@@ -81,7 +81,7 @@ export  async function formRegister(contenedor, funcion){
     })
      
 }
-export function formUpdate(contenedor,result, id){
+export function formUpdate(contenedor,result, id, funcion){
     contenedor.innerHTML=`
                         <div>
                             <p>Nombre actual (${result.name})</p>
@@ -109,6 +109,7 @@ export function formUpdate(contenedor,result, id){
         }
         const  result = await put('/user/update/', id, dataNueva) 
         console.log(result)
+        await funcion()
     })
                     
 

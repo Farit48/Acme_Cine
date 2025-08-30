@@ -1,12 +1,12 @@
 import { ObjectId } from "mongodb";
 
-import Cinemamodel from "../models/cinemas.model.js";
+import FilmModel from "../models/films.model.js";
 
 
-export default class CinemaController {
-    #CinemaModel
+export default class FilmControler {
+    #FilmModel
     constructor(db){
-        this.#CinemaModel = new Cinemamodel(db)
+        this.#FilmModel = new FilmModel(db)
         this.getAll=this.getAll.bind(this)
         this.getBy=this.getBy.bind(this)
         this.create=this.create.bind(this)
@@ -15,7 +15,7 @@ export default class CinemaController {
     } 
     async getAll(req, res){
         try{
-            const result = await this.#CinemaModel.findAll()
+            const result = await this.#FilmModel.findAll()
             return res.status(200).send(result)
         }catch(err){
             res.status(400).json({message:'Error al cargar los cines', error: err})
@@ -25,9 +25,9 @@ export default class CinemaController {
     
     async getBy(req,res){
         try{
-            const data = await this.#CinemaModel.findBy({_id:ObjectId.createFromHexString(req.params.id)});
+            const data = await this.#FilmModel.findBy({_id:ObjectId.createFromHexString(req.params.id)});
             if(data){
-                return res.status(200).json(data)
+                return res.status(200).json({message:data})
             }else{
                 return res.status(200).json({message:'No se encuentra la info en la base de datos'})
             }
@@ -40,7 +40,7 @@ export default class CinemaController {
     }
     async create(req, res){
         try{
-            const creation = await this.#CinemaModel.create(req.body)
+            const creation = await this.#FilmModel.create(req.body)
             return res.status(200).json({message:'Cine creado con exito', creation})
         }catch(err){
             res.status(400).json({message:'Error al crear cine', error: err})
@@ -48,7 +48,7 @@ export default class CinemaController {
     }
     async update(req,res){
         try{
-            const result = await this.#CinemaModel.update({_id:ObjectId.createFromHexString(req.params.id)}, {$set:req.body})
+            const result = await this.#FilmModel.update({_id:ObjectId.createFromHexString(req.params.id)}, {$set:req.body})
             return res.status(200).json({message:'Actualizado con exito', result})
         }catch(err){
             res.status(400).json({message:'Error al actualizar info', error: err})
@@ -57,7 +57,7 @@ export default class CinemaController {
         
     async delete (req,res){
         try{
-            const result = await this.#CinemaModel.delete({_id:ObjectId.createFromHexString(req.params.id)})
+            const result = await this.#FilmModel.delete({_id:ObjectId.createFromHexString(req.params.id)})
             return res.status(200).json({message:'Se pudo eliminar correctamente', result})
         }catch(err){
             res.status(400).json({message:'Error al eliminar cine', error: err})
