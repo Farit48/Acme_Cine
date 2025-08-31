@@ -2,7 +2,7 @@ body{
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('../utilsFront/aaa.png');
+    background-color: rgb(39, 28, 40);
     background-size: cover;
     color: #e0e0e0;
     height: 98vh;
@@ -54,77 +54,45 @@ body{
 
 
 
-
-
-#Main-dinamic table {
-    width: 85%;
-    border-collapse: none; /* Permite fusionar bordes */
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: transparent;
-     backdrop-filter: blur(8px);
+#Main-dinamic {
+    position: relative;
+    z-index: 1;
+    background-color: rgb(0, 0, 0);
+}
+#Agregar{
+    position: absolute;
+    background-color: aqua;
+    top: 50%;
+    left: auto;
+    z-index: 10;
+}
+#Agregar .table-Register {
+  width: 100%;
+  /* Separa las celdas, no funciona si tienes border-collapse: collapse */
+  border-spacing: 15px; 
 }
 
-#Main-dinamic table th {
-    background-color: #371161;
-    color: white;
-    padding: 12px 15px;
+#Agregar .table-Register tr {
+  text-align: center;
+  /* Puedes intentar margin, pero no es la forma estándar para tablas. */
+}
+
+#Agregar .table-Register tr td, #Agregar .table-Register tr th {
+  padding: 20px; /* Esto agrega espacio interno a cada celda */
+}
+
+/* Si tienes la propiedad border-collapse en tu CSS, es importante quitarla. */
+table {
+  border-collapse: separate; 
+}
+
+#comfirmation{
+    position: absolute;
+    background-color: blue;
+    width: 200px;
+    top: 50px;
     text-align: center;
-    font-weight: bold;
-    border-bottom: 2px solid #560a9f; /* Borde inferior para los encabezados */
 }
-
-/*
-  CSS para las celdas de la tabla principal
-*/
-#Main-dinamic table > tbody > tr > td {
-    padding: 10px 15px;
+#comfirmation tr{
     text-align: center;
-    border-bottom: 1px solid #e0e0e0;
-    color: #ffffff;
-}
-
-/*
-  CSS para las tablas anidadas dentro de las celdas de la tabla principal
-*/
-#Main-dinamic table > tbody > tr > td table {
-    /* Resetea el border-collapse para esta tabla anidada */
-    border-collapse: separate;
-    border-spacing: 0; 
-    width: 100%; /* Ocupa el 100% de la celda contenedora */
-}
-
-#Main-dinamic table > tbody > tr > td table td {
-    border: 1px solid #e0e0e0; /* Aplica bordes a las celdas de la tabla anidada */
-    padding: 10px 15px;
-}
-
-/*
-  Estilos adicionales y de hover
-*/
-#Main-dinamic table tbody tr:hover {
-    
-    cursor: pointer;
-}
-
-#Main-dinamic table th:first-child {
-    border-top-left-radius: 8px;
-}
-
-#Main-dinamic table th:last-child {
-    border-top-right-radius: 8px;
-}
-
-#Main-dinamic table tbody tr:last-child td:first-child {
-    border-bottom-left-radius: 8px;
-}
-
-#Main-dinamic table tbody tr:last-child td:last-child {
-    border-bottom-right-radius: 8px;
-}
-
-#Main-dinamic table tbody tr:last-child td {
-    border-bottom: none;
 }

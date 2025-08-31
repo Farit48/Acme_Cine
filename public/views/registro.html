@@ -7,7 +7,44 @@
     <script src="../js/register.js" defer></script>
 </head>
 <body>
-    <h1>Bienvenido al registro</h1>
-    <input type="nu">
+    <table class="table-Register">
+        <thead>
+            <tr>
+                <th colspan="2">INGRESE LOS DATOS DEL CINE A REGISTRAR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Codigo</th>
+                <td><input id="codeCinema" type="text" placeholder="Ingresar codigo de cine"></td>
+                <th>Codigo sala</th>
+                <td><input id="codeSala" type="text" placeholder="Ingresar codigo de cine"></td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td><input id="nameCinema" type="text" placeholder="Ingresar nombre de cine"></td>
+                <th>Numero sillas</th>
+                <td><input id="numberChair" type="text" placeholder="Ingresar nombre de cine"></td>
+                <th><button>Agregar otra sala</button></th>
+            </tr>
+            <tr>
+                <th>Direccion</th>
+                <td><input id="addressCinema" type="text" placeholder="Ingresar direccion de cine"></td>                
+            </tr>
+            <tr>
+                <th>Ciudad</th>
+                <td><input id="locationCinema" type="text" placeholder="Ingresar ciudad de cine"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="2">¿Desea registrar salas?</th>
+            </tr>
+            <tr>
+                <td><button id="salasSi" >SI</button></td>
+                <td><button id="salasNo" >NO</button></td>
+            </tr>
+        </tfoot>
+    </table>
 </body>
 </html>

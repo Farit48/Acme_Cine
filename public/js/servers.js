@@ -6,11 +6,13 @@ const path = 'http://localhost:3002'
 // Se crea funcion post para modularizar el codigo 
 export  async function post(endPont, data){
     try{
+        const token = localStorage.getItem('token'); 
         const solicitud = await fetch(`${path}${endPont}`, 
             {
                 method:'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(data)
             }
@@ -37,11 +39,13 @@ export  async function post(endPont, data){
 export async function put(endPont, id, data){
     try{
         console.log(data)
+        const token = localStorage.getItem('token'); 
         const solicitud = await fetch(`${path}${endPont}${id}`,
             {
                 method:'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body:JSON.stringify(data)
             }
@@ -65,11 +69,13 @@ export async function put(endPont, id, data){
 
 export  async function get(endPont){
     try{
+        const token = localStorage.getItem('token'); 
         const solicitud = await fetch(`${path}${endPont}`,
             {
                 method:'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
             }
         )
@@ -91,11 +97,13 @@ export  async function get(endPont){
 
 export async function getBy(endPont,id){
     try{
+        const token = localStorage.getItem('token'); 
         const solicitud = await fetch(`${path}${endPont}${id}`,
             {
               method:'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },  
             }
         );
@@ -118,11 +126,13 @@ export async function getBy(endPont,id){
 
 export async function remove(endPont, id) {
     try{
+        const token = localStorage.getItem('token'); 
         const solicitud = await fetch(`${path}${endPont}${id}`,
             {
                 method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
             }
         );

@@ -15,8 +15,8 @@ app.use(express.json())
 app.use(express.static('./public'))
 
 app.use('/log' ,authRoute)
-app.use('/user', userRoute)
-app.use('/cinema',cinemaRoute )
+app.use('/user', verifyToken,userRoute)
+app.use('/cinema',verifyToken,cinemaRoute )
 app.use('/film',filmRoute )
 
 

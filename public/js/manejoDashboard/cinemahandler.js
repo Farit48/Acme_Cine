@@ -1,3 +1,4 @@
+
 import { post, put, getBy } from "../servers.js";
 export function rowsTableCinemas(data){
     return  data = 
@@ -16,7 +17,7 @@ export function rowAndHeadTableCinemas(rows,contenedor){
     const  ConenidoMain= `
                 <table>    
                     <header>
-                        <h1>Usuarios</h1>
+                        <h1>Cines</h1>
                     </header>
                     <div>
                         <thead>
@@ -38,6 +39,7 @@ export function rowAndHeadTableCinemas(rows,contenedor){
                 </table>
                 <div id="Agregar"></div>
                 <div id="Actualizar"></div>
+                <div id="Vercine" ></div>
                 <div>
                     <button id="btnAgregar">Agregar Cine</button>
                 </div>
@@ -45,265 +47,483 @@ export function rowAndHeadTableCinemas(rows,contenedor){
     contenedor.innerHTML = ConenidoMain;
 }
 
-export async function formRegisterCinema(contenedor, funcion) {
-    // Arrays para almacenar múltiples salas y funciones
-    const salas = [];
-    let funcionesDeSala = [];
-
-    // HTML inicial del formulario
-    contenedor.innerHTML =
-        `<div>
-            <h2>Registro de Cine</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <td><p>Codigo</p></td>
-                        <td><input type="text" id="codeCineRegister"></td>
-                    </tr>
-                    <tr>
-                        <td><p>Nombre</p></td>
-                        <td><input type="text" id="nameCineRegister"></td>
-                    </tr>
-                    <tr>
-                        <td><p>Direccion</p></td>
-                        <td><input type="tel" id="addressCineRegister"></td>
-                    </tr>
-                    <tr>
-                        <td><p>Ciudad</p></td>
-                        <td><input type="text" id="locationCineRegister"></td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <h3>Salas y Funciones</h3>
-            <div id="salasFormContainer"></div>
-            
-            <input type="button" id="addSalaBtn" value="Agregar Sala">
-            <div id="ListaSalas"></div>
-
-            <input type="button" name="btnEnviarRegistro" value="Enviar" id="btnEnviarRegistro">
-        </div>`;
-    
-    // Contenedores
-    const salasFormContainer = document.getElementById('salasFormContainer');
-    const listaSalas = document.getElementById('ListaSalas');
-    const addSalaBtn = document.getElementById('addSalaBtn');
-    const btnEnviar = document.getElementById('btnEnviarRegistro');
-
-    // Función para renderizar el formulario de salas y funciones
-    const renderSalaForm = () => {
-        // Reinicia las funciones para la nueva sala
-        funcionesDeSala = []; 
-        salasFormContainer.innerHTML = `
-            <h3>Nueva Sala</h3>
-            <table>
-                <tbody>
-                    <tr>
-                        <td><p>Codigo de Sala</p></td>
-                        <td><input type="text" id="codeSalaRegister"></td>
-                    </tr>
-                    <tr>
-                        <td><p>Total de Sillas</p></td>
-                        <td><input type="number" id="chairsSalaRegister"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div id="funcionesFormContainer"></div>
-            <div id="ListaFunciones"></div>
-            <input type="button" id="addFuncionBtn" value="Agregar Funcion">
-            <input type="button" id="saveSalaBtn" value="Guardar Sala">
-        `;
-
-        const funcionesFormContainer = document.getElementById('funcionesFormContainer');
-        const listaFunciones = document.getElementById('ListaFunciones');
-        const addFuncionBtn = document.getElementById('addFuncionBtn');
-        const saveSalaBtn = document.getElementById('saveSalaBtn');
-
-        // Evento para agregar funciones
-        addFuncionBtn.addEventListener('click', () => {
-            funcionesFormContainer.innerHTML = `
-                <h3>Nueva Función</h3>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><p>Pelicula</p></td>
-                            <td><input type="text" id="film"></td>
-                        </tr>
-                        <tr>
-                            <td><p>Fecha</p></td>
-                            <td><input type="date" id="dateFilm"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <input type="button" id="saveFuncionBtn" value="Guardar Función">
-            `;
-            
-            const saveFuncionBtn = document.getElementById('saveFuncionBtn');
-            saveFuncionBtn.addEventListener('click', () => {
-                const film = document.getElementById('film').value;
-                const dateFilm = document.getElementById('dateFilm').value;
-                
-                if (film && dateFilm) {
-                    funcionesDeSala.push({ pelicula: film, fecha: dateFilm });
-                    listaFunciones.innerHTML += `<p>Función agregada: ${film} el ${dateFilm}.</p>`;
-                    document.getElementById('film').value = '';
-                    document.getElementById('dateFilm').value = '';
-                } else {
-                    alert('Por favor, completa los campos de la función.');
-                }
-            });
-        });
-
-        // Evento para guardar la sala y sus funciones
-        saveSalaBtn.addEventListener('click', () => {
-            const codeSala = document.getElementById('codeSalaRegister').value;
-            const chairsSala = document.getElementById('chairsSalaRegister').value;
-            
-            if (codeSala && chairsSala) {
-                salas.push({ codigo: codeSala, totalSillas: chairsSala, funciones: [...funcionesDeSala] });
-                
-                // Actualiza la visualización de salas
-                listaSalas.innerHTML += `<p>Sala agregada: ${codeSala} (${chairsSala} sillas) con ${funcionesDeSala.length} funciones.</p>`;
-                
-                // Limpia el formulario de salas y funciones
-                salasFormContainer.innerHTML = '';
-            } else {
-                alert('Por favor, completa los campos de la sala.');
-            }
-        });
-    };
-
-    // Evento inicial para mostrar el formulario de sala
-    addSalaBtn.addEventListener('click', renderSalaForm);
-
-    // Lógica para el botón de enviar final
-    btnEnviar.addEventListener('click', async () => {
-        const baseData = {
-            codigo: document.getElementById('codeCineRegister').value,
-            nombre: document.getElementById('nameCineRegister').value,
-            direccion: document.getElementById('addressCineRegister').value,
-            ciudad: document.getElementById('locationCineRegister').value,
-            salas: salas 
-        };
-        const result = await post('/cinema/register', baseData);
-        console.log(result);
-        await funcion();
-    });
-}
-export async function formUpdateCinema(contenedor,result, id, funcion){
-    
-  
-    const salasHtml = result.salas.map(sala => {
-
-       
-        const funcionesHtml = sala.funciones.map(func => `
-            <tr>
-                <td id="Funcio_pelicula">${func.pelicula}</td>
-                <td id="Funcio_fecha">${func.fecha}</td>
-                <td><button class="btnDelete" regid="${result._id}">-</button></td>
-                <td><button class="btnUpdate" regid="${result._id}">Actualizar</button></td>
-            </tr>
-        `).join(''); 
-
-        
-        return `
-            <tr>
-                <td id="sala_codigo">${sala.codigo}</td>
-                <td id="sala_totalsillas">${sala.totalSillas}</td>
-                
-                <td>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>pelicula</th>
-                                <th>fecha</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${funcionesHtml}
-                        </tbody>
-                    </table>
-                </td>
-                <td><button class="btnDelete" regid="${result._id}">-</button></td>
-                <td><button class="btnUpdate" regid="${result._id}">Actualizar</button></td>
-            </tr>
-        `;
-    }).join(''); 
-
-   
-    contenedor.innerHTML = `
-         <div>
-            <h2>Actualizar Datos del Cine</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <td><p>Codigo actual (${result.codigo})</p></td>
-                        <td><input id="newCodeCinemaUpdate" type="text"></td>
-                    </tr>
-                    <tr>
-                        <td><p>Nombre actual (${result.nombre})</p></td>
-                        <td><input type="text" id="nameCinemaUpdate" name="nameCinemaUpdate"></td>
-                    </tr>
-                    <tr>
-                        <td><p>Direccion actual (${result.direccion})</p></td>
-                        <td><input type="tel" id="addressCinemaUpdate" name="addressCinemaUpdate"></td>
-                    </tr>
-                    <tr>
-                        <td><p>Ciudad actual (${result.ciudad})</p></td>
-                        <td><input type="text" id="locationCinemaUpdate" name="locationCinemaUpdate"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h2>Salas actuales</h2>
-            <table>
+export async function formCineRegister(campo, funcion) {
+    const quitar = document.getElementById('btnAgregar')
+    quitar.remove()
+    campo.innerHTML = `
+          <table class="table-Register">
                 <thead>
                     <tr>
-                        <th>Codigo</th>
-                        <th>Total sillas</th>
-                        <th>Funciones</th>
-                        <th></th>
-                        <th></th>
+                        <th colspan="2">INGRESE LOS DATOS DEL CINE A REGISTRAR</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${salasHtml}
+                    <tr id="CampoCodeSalas">
+                        <th>Codigo</th>
+                        <td><input id="codeCinema" type="text" placeholder="Ingresar codigo de cine"></td>
+                        
+                    </tr>
+                    <tr id="CampoChairSalas">
+                        <th>Nombre</th>
+                        <td><input id="nameCinema" type="text" placeholder="Ingresar nombre de cine"></td>
+                        
+                        
+                    </tr>
+                    <tr id="CampoMoreSalas">
+                        <th>Direccion</th>
+                        <td><input id="addressCinema" type="text" placeholder="Ingresar direccion de cine"></td>
+                        
+                        
+                    </tr>
+                    <tr id="AddFunctions">
+                        <th>Ciudad</th>
+                        <td><input id="locationCinema" type="text" placeholder="Ingresar ciudad de cine"></td>
+                        
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">¿Desea registrar salas?</th>
+                    </tr>
+                    <tr>
+                        <td><button id="salasSi" >SI</button></td>
+                        <td><button id="salasNo" >NO</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div id="comfirmation"></div>
+            
+    `
+
+    
+
+    const salasNo = document.getElementById('salasNo')
+    salasNo.addEventListener('click', ()=>{
+        const cine = {
+            codigo:document.getElementById('codeCinema').value,
+            nombre:document.getElementById('nameCinema').value,
+            direccion:document.getElementById('addressCinema').value,
+            ciudad:document.getElementById('locationCinema').value,
+            salas:[]
+        }
+        const comfirmation = document.getElementById('comfirmation')
+        const pregunta = document.createElement('div')
+        pregunta.innerHTML = `
+                 <table id="table-Confirmation">
+                    <thead>
+                            <tr>
+                               <th colspan="2" >Confirme la info antes de guardar</th>
+                            </tr>
+                    </thead> 
+                    <tbody>
+                            <tr>
+                                <th>Codigo</th>
+                                <td>${cine.codigo}</td>
+                            </tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <td>${cine.nombre}</td>
+                            </tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <td>${cine.direccion}</td>
+                            </tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <td>${cine.ciudad}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">Sin Salas</th>
+                            </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th><button id="Enviar" >Guardar</button></th>
+                            <th><button id="Descartar" >Cancelar</button></th>
+                        </tr>
+                    </tfoot>
+                </table>
+        `
+        comfirmation.append(pregunta)
+        const enviar = document.getElementById('Enviar')
+        enviar.addEventListener('click', async()=>{
+            await post('/cinema/register', cine)
+            funcion()
+        })
+        const cancelar = document.getElementById('Descartar')
+        cancelar.addEventListener('click', async()=>{
+            funcion()
+        })
+        
+    })
+
+  
+    const salasSi = document.getElementById('salasSi')
+    salasSi.addEventListener('click', ()=>{
+        const cine = {
+            codigo:document.getElementById('codeCinema').value,
+            nombre:document.getElementById('nameCinema').value,
+            direccion:document.getElementById('addressCinema').value,
+            ciudad:document.getElementById('locationCinema').value,
+            salas:[]
+        }
+        const btnNo = document.getElementById('salasNo')
+        btnNo.remove()
+        const th1 = document.createElement('th')
+        const td1 = document.createElement('td')
+        const th2 = document.createElement('th')
+        const td2 = document.createElement('td')
+        const btnMore = document.createElement('th')
+        const btnFuntion = document.createElement('th')
+        const campoCodeSalas = document.getElementById('CampoCodeSalas')
+        const campoChairSalas = document.getElementById('CampoChairSalas')
+        const campoMoreSalas = document.getElementById('CampoMoreSalas')
+        
+        th1.textContent = 'Codigo sala'
+        td1.innerHTML = '<input id="codeSala" type="text" placeholder="Ingresar codigo de cine"></input>'
+        th2.textContent = 'Numero sillas'
+        td2.innerHTML = '<input id="numberChair" type="text" placeholder="Ingresar nombre de cine"></input>'
+        btnMore.innerHTML = `<button id="moreRooms">Click para enviar sala</button><br>               
+        <button id="enviar">Guardar</button>`
+      
+        campoCodeSalas.append(th1,td1)
+        campoChairSalas.append(th2,td2)
+        campoMoreSalas.append(btnMore)
+        const moreRooms=document.getElementById('moreRooms')
+        const addFunction = document.getElementById('funtions')
+        if(moreRooms){
+            moreRooms.addEventListener('click', ()=>{
+                const dataActual = {
+                    codigo:document.getElementById('codeSala').value,
+                    totalSillas:document.getElementById('numberChair').value
+                }
+                cine.salas.push(dataActual)
+                alert('se ah agregado sala correctamente')
+                
+            })
+           
+
+        }
+        const enviar = document.getElementById('enviar')
+        enviar.addEventListener('click', ()=>{
+            let salas = cine.salas.map( sala =>{
+                return sala =`<tr>
+                        <td>${sala.codigo}</td>
+                        <td>${sala.totalSillas}</td>
+                    </tr>`
+            }).join('')
+            console.log(cine.salas)
+            const comfirmation = document.getElementById('comfirmation')
+            const pregunta = document.createElement('div')
+            pregunta.innerHTML = `
+                    <table id="table-Confirmation">
+                        <thead>
+                                <tr>
+                                <th colspan="2" >Confirme la info antes de guardar</th>
+                                </tr>
+                        </thead> 
+                        <tbody>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <td>${cine.codigo}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <td>${cine.nombre}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <td>${cine.direccion}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <td>${cine.ciudad}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">Salas</th>
+                                    ${salas}
+                                </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th><button id="Enviar" >Guardar</button></th>
+                                <th><button id="Descartar" >Cancelar</button></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+            `
+            comfirmation.append(pregunta)
+            const enviar = document.getElementById('Enviar')
+            enviar.addEventListener('click', async()=>{
+                await post('/cinema/register', cine)
+                funcion()
+            })
+            const cancelar = document.getElementById('Descartar')
+            cancelar.addEventListener('click', async()=>{
+                funcion()
+            })
+        }) 
+        if(addFunction){
+            addFunction.addEventListener('click')
+        }
+        
+    })
+    
+}
+
+export function formUpdateCine(campo, dataCine, funcion){
+    const quitar = document.getElementById('btnAgregar')
+    quitar.remove()
+    campo.innerHTML= `
+        <table>
+            <thead>
+                    <tr colspan="2" >Actualice los datos</tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <th>Codigo ${dataCine.codigo}</th>
+                        <td><input id="newCode" type="text"></td>
+                    </tr>
+                    <tr>
+                        <th>Nombre ${dataCine.nombre}</th>
+                        <td><input id="newName" type="text"></td>
+                    </tr>
+                    <tr>
+                        <th>Direccion ${dataCine.direccion}</th>
+                        <td><input id="newAddress" type="text"></td>
+                    </tr>
+                    <tr>
+                        <th>Ciudad ${dataCine.ciudad}</th>
+                        <td><input id="newCity" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td id="showRoms">
+                            <input id="newRooms" type="button" value="Salas">
+                        </td>
+                    </tr>
+            </tbody>
+           
+            <tfoot>
+                    <tr>
+                        <td><button id="enviar" >Actualizar</button></td>
+                        <td><button id="cancelar">Cancelar</button></td>
+                    </tr>
+            </tfoot>
+        </table>
+        <div id="comfirmation"></div>
+    
+    `
+    const btnEnviar = document.getElementById('enviar')
+    const newRooms = document.getElementById('newRooms')
+    const cancelar = document.getElementById('cancelar')
+    btnEnviar.addEventListener('click', ()=>{
+        const data = {
+            codigo:document.getElementById('newCode').value,
+            nombre:document.getElementById('newName').value,
+            direccion:document.getElementById('newAddress').value,
+            ciudad:document.getElementById('newCity').value,
+        }
+        const confirmar = document.getElementById('comfirmation')
+        confirmar.innerHTML = `
+            <table>
+                <thead>
+                        <tr colspan="2" >Confirme los datos a actualizar</tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <th>Codigo</th>
+                            <td>${data.codigo}</td>
+                        </tr>
+                        <tr>
+                            <th>Nombre</th>
+                            <td>${data.nombre}</td>
+                        </tr>
+                        <tr>
+                            <th>Direccion</th>
+                            <td>${data.direccion}</td>
+                        </tr>
+                        <tr>
+                            <th>Ciudad</th>
+                            <td>${data.ciudad}</td>
+                        </tr>
+                </tbody>
+                <tfoot>
+                        <tr>
+                            <td><button id="enviar2" >Confirmar</button></td>
+                            <td><button id="cancelar2">Cancelar</button></td>
+                        </tr>
+                </tfoot>
+            </table>
+        
+        `
+        const enviar = document.getElementById('enviar2')
+        const cancelar = document.getElementById('cancelar2')
+
+        cancelar.addEventListener('click', ()=>{
+            funcion()
+            
+        })
+        enviar.addEventListener('click', async()=>{
+            await put('/cinema/update/', dataCine._id, data)
+            funcion()
+        })
+
+        
+    })
+
+    newRooms.addEventListener('click',()=>{
+        const addcampo = document.getElementById('showRoms')
+        const showroms = dataCine.salas.map(sala=>{
+            return sala = `
+                <tr>
+                    <td>${sala.codigo}</td>
+                    <td>${sala.totalSillas}</td>
+                </tr>
+                <tr>
+                    <td><input id="newRomCode" type="text" width="15px"></td>
+                    <td><input id="newRomChair" type="number" width="15px"></td>
+                </tr>
+            `
+        }).join('')
+        addcampo.innerHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>SILLAS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${showroms}
                 </tbody>
             </table>
+       `
+       
+        btnEnviar.addEventListener('click',()=>{
+            const data = {
+                codigo:document.getElementById('newCode').value,
+                nombre:document.getElementById('newName').value,
+                direccion:document.getElementById('newAddress').value,
+                ciudad:document.getElementById('newCity').value,
+                salas:[
+                    {
+                        codigo:document.getElementById('newRomCode').value,
+                        totalSillas:document.getElementById('newRomChair').value
+                    }
+                ]
+            }
+            const salas = data.salas.map(sala=>{
+                return sala = `
+                    <tr>
+                        <th>CODIGO</th>
+                        <td>${sala.codigo}</td>
+                        <th>SILLAS</th>
+                        <td>${sala.totalSillas}</td>
+                        
+                    </tr>
+                `
+            }).join('')
+            const confirmar = document.getElementById('comfirmation')
+            confirmar.innerHTML = `
+                <table>
+                    <thead>
+                            <tr colspan="2" >Confirme los datos a actualizar</tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <th>Codigo</th>
+                                <td>${data.codigo}</td>
+                            </tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <td>${data.nombre}</td>
+                            </tr>
+                            <tr>
+                                <th>Direccion</th>
+                                <td>${data.direccion}</td>
+                            </tr>
+                            <tr>
+                                <th>Ciudad</th>
+                                <td>${data.ciudad}</td>
+                            </tr>
+                            <tr>
+                                <th>Salas</th>
+                                ${salas}
+                            </tr>
+                    </tbody>
+                    <tfoot>
+                            <tr>
+                                <td><button id="enviar2" >Confirmar</button></td>
+                                <td><button id="cancelar2">Cancelar</button></td>
+                            </tr>
+                    </tfoot>
+                </table>
             
-            <input type="button" name="btnEnviarUpdate" value="Enviar nuevos datos" id="btnEnviarUpdate">
-        </div>
-    `;
-    const btnenviarUpdate = document.getElementById('btnEnviarUpdate')
-    btnenviarUpdate.addEventListener('click', async(event)=>{
-        event.preventDefault()
-        const dataNueva = {
-            codigo:document.getElementById('newCodeCinemaUpdate').value,
-            nombre:document.getElementById('nameCinemaUpdate').value,
-            direccion:document.getElementById('addressCinemaUpdate').value,
-            ciudad:document.getElementById('locationCinemaUpdate').value,
-            salas:[
-                {
-                    codigo:document.getElementById('sala_codigo').value,
-                    totalSillas:document.getElementById('sala_totalsillas').value,
-                    funciones:[
-                        {
-                            pelicula:document.getElementById('Funcio_pelicula').value,
-                            fecha:document.getElementById('Funcio_fecha').value,
-                        }
-                    ]
-                }
-            ]
-        }
-        const  result = await put('/cinema/update/', id, dataNueva) 
-        console.log(result)
-        await funcion()
-    })    
+            `
+            const enviar = document.getElementById('enviar2')
+            const cancelar = document.getElementById('cancelar2')
 
-    
-    
-                    
+            cancelar.addEventListener('click', ()=>{
+                funcion()
+                
+            })
+            enviar.addEventListener('click', async()=>{
+                await put('/cinema/update/', dataCine._id, data)
+                funcion()
+            })
+        })
+        
 
+    })
+    cancelar.addEventListener('click',()=>{
+        funcion()
+    })
+}
+
+export function detailsCine(campo,data,funcion){
+    const salas = data.salas.map(sala =>{
+        return sala = `
+            <tr>
+                <th>CODIGO</td>
+                <td>${sala.codigo}</td>
+                <td>SILLAS</td>
+                <td>${sala.totalSillas}</td>
+            </tr>
+        `
+    })
+    
+    campo.innerHTML = `
+        <table>
+            <thead>
+                    <tr>Detalles del cine</tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <th>Codigo</th>
+                        <td>${data.codigo}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre</th>
+                        <td>${data.nombre}</td>
+                    </tr>
+                    <tr>
+                        <th>Direccion</th>
+                        <td>${data.direccion}</td>
+                    </tr>
+                    <tr>
+                        <th>Ciudad</th>
+                        <td>${data.ciudad}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Salas</th>
+                        ${salas}
+                    </tr>
+            </tbody>
+        </table>
+        <button id="Volver">Volever</button>
+    `
+    const volver = document.getElementById('Volver')
+    volver.addEventListener('click', ()=>{
+        funcion()
+    })
 }

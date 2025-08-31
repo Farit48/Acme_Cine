@@ -1,8 +1,8 @@
 
-import {post, get, remove, getBy} from './servers.js'
+import { get, remove, getBy} from './servers.js'
 
 import {rowsTableUsers, rowAndHeadTableUsers, formRegister, formUpdate} from './manejoDashboard/userhandler.js'
-import {rowsTableCinemas, rowAndHeadTableCinemas, formRegisterCinema, formUpdateCinema} from './manejoDashboard/cinemahandler.js'
+import {rowsTableCinemas, rowAndHeadTableCinemas, formCineRegister, formUpdateCine, detailsCine} from './manejoDashboard/cinemahandler.js'
 
 
 
@@ -108,7 +108,7 @@ cinesBtn.addEventListener('click', (event)=>{
             if(btnAgregar && agregarCine){
                 btnAgregar.addEventListener('click', async(event)=>{
                     event.preventDefault()
-                    formRegisterCinema(agregarCine, restarTableCines); 
+                    formCineRegister(agregarCine, restarTableCines); 
                      
                 })
             }else{
@@ -134,19 +134,37 @@ cinesBtn.addEventListener('click', (event)=>{
             const campodeActualizar = document.getElementById('Actualizar')
             btnAcutalizar.forEach(btn=>{
                 btn.addEventListener('click', async(regid)=>{
-                    
                    try{
                         const id = regid.target.getAttribute('regid')
                         console.log(id)
                         const cine = await getBy('/cinema/readBy/', id)
                         console.log(cine) 
-                        formUpdateCinema(campodeActualizar, cine, id, restarTableCines)
+                        formUpdateCine(campodeActualizar, cine, restarTableCines)
                     } catch(err){
                         console.log('Error en el metodo leer primero para actualizar de dashboard', err)
                     }
                 })
+            })
+            // Ver detalles del cine
+            const verDetalles = document.querySelectorAll('.btnVermas')
+            const campoDetalle = document.getElementById('Vercine')
+            verDetalles.forEach(btn=>{
+                btn.addEventListener('click',async(regid)=>{
+                    console.log('epa')
+                    try{
+                        const id = regid.target.getAttribute('regid')
+                        console.log(id)
+                        const cine = await getBy('/cinema/readBy/', id)
+                        detailsCine(campoDetalle,cine,restarTableCines)
+                    }catch(err){
+
+                    }
+                })
             })              
         }
+     
+        
+
         restarTableCines()
     }catch(err){
         console.log('error en el get de cines al hacer click en el boton cines')
