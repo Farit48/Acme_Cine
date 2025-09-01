@@ -2,7 +2,7 @@ body{
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: rgb(39, 28, 40);
+    background-image: url('../utilsFront/aaa.png');
     background-size: cover;
     color: #e0e0e0;
     height: 98vh;
@@ -65,25 +65,27 @@ body{
     top: 50%;
     left: auto;
     z-index: 10;
+     background-color: transparent;
+    backdrop-filter: blur(8px);
 }
 #Agregar .table-Register {
+    
   width: 100%;
-  /* Separa las celdas, no funciona si tienes border-collapse: collapse */
   border-spacing: 15px; 
 }
 
 #Agregar .table-Register tr {
   text-align: center;
-  /* Puedes intentar margin, pero no es la forma estándar para tablas. */
 }
 
 #Agregar .table-Register tr td, #Agregar .table-Register tr th {
-  padding: 20px; /* Esto agrega espacio interno a cada celda */
+  padding: 20px; 
 }
 
-/* Si tienes la propiedad border-collapse en tu CSS, es importante quitarla. */
 table {
   border-collapse: separate; 
+   background-color: transparent;
+    backdrop-filter: blur(8px);
 }
 
 #comfirmation{
