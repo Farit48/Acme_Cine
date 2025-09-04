@@ -5,6 +5,8 @@ import userRoute from './src/routes/user.route.js'
 import authRoute from './src/routes/login.route.js'
 import cinemaRoute from './src/routes/cinema.route.js'
 import filmRoute from './src/routes/film.route.js'
+ 
+import {MongoClient} from 'mongodb'
 
 import csvRoute from './src/routes/csv.route.js'
 
@@ -18,11 +20,15 @@ app.use(express.text())
 
 app.use(express.static('./public'))
 
+const client = new MongoClient(process.env.URL_MONGO)
+await client.connect()
+const db = client.db(process.env.DB_NAME)
+
 app.use('/log' ,authRoute)
 app.use('/user', verifyToken,userRoute)
 app.use('/cinema',verifyToken,cinemaRoute )
 app.use('/function',filmRoute )
-app.use('/csv', csvRoute)
+app.use('/csv', csvRoute(db))
 
 
 app.listen(
