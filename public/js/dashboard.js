@@ -3,7 +3,7 @@ import { get, remove, getBy} from './servers.js'
 
 import {rowsTableUsers, rowAndHeadTableUsers, formRegister, formUpdate} from './manejoDashboard/userhandler.js'
 import {rowsTableCinemas, rowAndHeadTableCinemas, formCineRegister, formUpdateCine, detailsCine} from './manejoDashboard/cinemahandler.js'
-
+import {rowsTableFunctions,rowAndHeadTableFunctions, formFunctionRegister} from './manejoDashboard/functionshandler.js'
 
 
 // Informacion del aside de cada perfil que inicia sesion
@@ -22,6 +22,8 @@ emailUser.innerHTML = dataUser.email
 
 const usersBtn = document.getElementById('UsuariosBtn')
 const cinesBtn = document.getElementById('Cinesbtn')
+const funtionBtn = document.getElementById('FuncionesBtn')
+
 const mainDinamic = document.getElementById('Main-dinamic')
 
 
@@ -95,7 +97,7 @@ usersBtn.addEventListener('click', async(event)=>{
 cinesBtn.addEventListener('click', (event)=>{
     event.preventDefault()
     try{
-        async function restarTableCines() {
+        async function restarTableFunctions() {
             const resultado =  await get('/cinema/read')
             const contenido = resultado.map(data => 
                 rowsTableCinemas(data)   
@@ -108,8 +110,89 @@ cinesBtn.addEventListener('click', (event)=>{
             if(btnAgregar && agregarCine){
                 btnAgregar.addEventListener('click', async(event)=>{
                     event.preventDefault()
-                    formCineRegister(agregarCine, restarTableCines); 
+                    formCineRegister(agregarCine, restarTableFunctions); 
                      
+                })
+            }else{
+                console.log('No existen los botones')
+            }
+            // Eliminar cine
+            const btnDelete = document.querySelectorAll('.btnDelete')
+            btnDelete.forEach(btn =>{
+                btn.addEventListener('click',async (even)=>{
+                    const id = even.target.getAttribute('regid')
+                    console.log(id)
+                    try{
+                        const resultado = await remove(`/cinema/deleate/`, id)
+                        console.log(resultado)
+                        restarTableFunctions()
+                    }catch(err){
+                        console.log('Error en el metodo eliminar de dashboard', err)
+                    }
+                })
+            })
+            // Actualizar un cine
+            const btnAcutalizar = document.querySelectorAll('.btnUpdate')
+            const campodeActualizar = document.getElementById('Actualizar')
+            btnAcutalizar.forEach(btn=>{
+                btn.addEventListener('click', async(regid)=>{
+                   try{
+                        const id = regid.target.getAttribute('regid')
+                        console.log(id)
+                        const cine = await getBy('/cinema/readBy/', id)
+                        console.log(cine) 
+                        formUpdateCine(campodeActualizar, cine, restarTableFunctions)
+                    } catch(err){
+                        console.log('Error en el metodo leer primero para actualizar de dashboard', err)
+                    }
+                })
+            })
+            // Ver detalles del cine
+            const verDetalles = document.querySelectorAll('.btnVermas')
+            const campoDetalle = document.getElementById('Vercine')
+            verDetalles.forEach(btn=>{
+                btn.addEventListener('click',async(regid)=>{
+                    console.log('epa')
+                    try{
+                        const id = regid.target.getAttribute('regid')
+                        console.log(id)
+                        const cine = await getBy('/cinema/readBy/', id)
+                        detailsCine(campoDetalle,cine,restarTableFunctions)
+                    }catch(err){
+
+                    }
+                })
+            })              
+        }
+     
+        
+
+        restarTableFunctions()
+    }catch(err){
+        console.log('error en el get de cines al hacer click en el boton cines')
+    }
+})
+
+// DASHBOARD FUNCIONES
+
+funtionBtn.addEventListener('click', (event)=>{
+    event.preventDefault()
+    try{
+        async function restarTableCines() {
+            const resultado =  await get('/function/read')
+            const contenido = resultado.map(data => 
+                rowsTableFunctions(data)   
+            ).join('');
+            rowAndHeadTableFunctions(contenido,mainDinamic)
+
+            // Agregar un Nuevo cine
+            const btnAgregar = document.getElementById('btnAgregar')
+            const agregarFunction = document.getElementById('Agregar')
+            if(btnAgregar && agregarFunction){
+                btnAgregar.addEventListener('click', async(event)=>{
+                    event.preventDefault()
+                    formFunctionRegister(agregarFunction, restarTableCines); 
+
                 })
             }else{
                 console.log('No existen los botones')
@@ -157,22 +240,17 @@ cinesBtn.addEventListener('click', (event)=>{
                         const cine = await getBy('/cinema/readBy/', id)
                         detailsCine(campoDetalle,cine,restarTableCines)
                     }catch(err){
-
                     }
                 })
             })              
         }
      
-        
 
         restarTableCines()
     }catch(err){
         console.log('error en el get de cines al hacer click en el boton cines')
     }
 })
-
-
-   
 
 
 

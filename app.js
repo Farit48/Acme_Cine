@@ -6,18 +6,23 @@ import authRoute from './src/routes/login.route.js'
 import cinemaRoute from './src/routes/cinema.route.js'
 import filmRoute from './src/routes/film.route.js'
 
+import csvRoute from './src/routes/csv.route.js'
+
+
 import verifyToken from './helpers/middlerwares/auth.middlerware.js'
 
 const app = express()
 
 app.use(express.json())
+app.use(express.text())
 
 app.use(express.static('./public'))
 
 app.use('/log' ,authRoute)
 app.use('/user', verifyToken,userRoute)
 app.use('/cinema',verifyToken,cinemaRoute )
-app.use('/film',filmRoute )
+app.use('/function',filmRoute )
+app.use('/csv', csvRoute)
 
 
 app.listen(
