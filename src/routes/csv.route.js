@@ -1,13 +1,21 @@
 import express from 'express'
 
-export function csvRoute(db){
+import {MongoClient} from 'mongodb'
+
+
+
+const client = new MongoClient(process.env.URL_MONGO)
+await client.connect()
+const db = client.db(process.env.DB_NAME)
+
+export function csvRoute(){
     const route = express.Router()
     route.post('/putCsv', (req,res)=>{
         const registros = req.body.split('\n').map(elem=> elem.replace('\r',''));
         const dataHeader = registros[0].split(';');
         console.log(registros,dataHeader)
 
-        const cines = {
+        const cine = {
             cine_codigo:cineCodigo,
             cine_nombre:cineNombre,
             cine_direccion:cineDireccion,
@@ -17,16 +25,20 @@ export function csvRoute(db){
                 sala_sillas:salaSillas,
             }
         }
-        const salas =
+    
 
         registros.forEach((element, i)=>{
+            console.log(element)
             let obj = {}
             if(i>0){
                 const registro = element.split(';')
                 registro.forEach(async(value, j)=>{
                     switch(dataHeader[j].split('_')[1]){
                         case 'cine':
-                            obj.cine = {...obj.cine,[cines[dataHeader[j]]]:value}
+                            obj.cine = {...obj.cine,[cine[dataHeader[j]]]:value}
+                            const result = await db.collection('Cinemas').insertOne([obj.cines])
+                            console.log(result)
+
                             
                     }
                 })
@@ -37,6 +49,7 @@ export function csvRoute(db){
         res.send('Testing')
 
     })
+    return route;
 }
 
 
